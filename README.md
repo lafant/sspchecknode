@@ -42,16 +42,15 @@
 **2. 测试api**
 - 在浏览器打开网址**http(s)://你的域名/check?id=nodeid**，把nodeid换成你的节点id
 
-- 或是在命令行输入'curl http(s)://你的域名/check?id=nodeid'，查看返回结果
+- 或是在命令行输入`curl http(s)://你的域名/check?id=nodeid`，查看返回结果
 
 - 返回结果如果是1代表节点正常，2代表前端认为节点离线，-1代表节点不存在
 
 - 如果返回可以接收，则前端api就成功做好了，下面ssh进入你要监测的后端服务器
 
 **3. 后端自动监控重启**
-- 通过git或者其他方式下载check.sh到你的后端服务器
-
-- 赋予执行权限`chmod 777 check.sh`
+- 通过git或者其他方式下载check.sh到你的后端服务器并赋予执行权限
+<br>`wget --no-check-certificate https://raw.githubusercontent.com/lafant/sspchecknode/master/check.sh && chmod 777 check.sh`<br>
 
 - 执行`vim check.sh`，修改你的节点id，网站域名，以及倒数第五行你的后端脚本run.sh的存放目录或是选择其他运行方式，我使用的是service supervisord restart，然后保存
 
