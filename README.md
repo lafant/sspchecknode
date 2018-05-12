@@ -1,3 +1,5 @@
+# 写在前面，fork自原作者，感谢原作者提供的思路和方法，但是原文中大错没有小错不断，以至于在实际使用中无法使用，经过dalao的提醒及我自己的实战，将其修正为可以正常使用的版本。
+
 # 要解决的问题
 一直以来sspanel v3通过数据库连接到前端有个问题，后端节点经常由于网络问题联络不到前端于是就会停止发送呼吸包，而网络恢复了之后一定几率后端不会主动嗅探重新发送呼吸包，但是其实python后端还在运行，也就是节点其实可以正常连接，但是前端会报节点失联，并不会统计流量。
 
@@ -7,36 +9,40 @@
 
 # 使用方法
 **1. 首先在前端网站建立api**
-- 修改你的网站目录下/app/HomeController.php文件<br>**添加引用**<br> `use App\Models\Node;`<br>**添加函数**<br>
+- 修改你的网站目录下app/Controllers/HomeController.php文件<br>**添加引用**<br> `use App\Models\Node;`<br>**添加函数**<br>
   ```
-  public function check($request,$response, $args)
-	{
-		$id = $request->getParam("id");
-		$node = Node::where('id',"=",$id)->first();
-		if ($node=="")
-		{
-			$status=-1;
-		}
-		else
-		{
-			if ($node->isNodeOnline() !== null) {
-            if ($node->isNodeOnline() == false) {
-							$status=2;
-            } else {
-              $status=1;
-            }
-       } else {
-							$status=-1;
-       }
-		}
+    public function check($request,$response, $args)
+  {
+  	$id = $request->getParam("id");
+  	$node = Node::where('id',"=",$id)->first();
+  	if ($node=="")
+  	{
+  		$status=-1;
+  	}
+  	else
+  	{
+  		if ($node->isNodeOnline() !== null) {
+          if ($node->isNodeOnline() == false) {
+  						$status=2;
+          } else {
+            $status=1;
+          }
+     } else {
+  						$status=-1;
+     }
+      }
+      echo $status;
+    }
     ```
 
-- 修改网站目录下/config/routes.php<br>**在// Home后面添加一行**<br>`$app->get('/check', 'App\Controllers\HomeController:check');`
+- 修改网站目录下/config/routes.php<br>**在// Homez最后面添加一行**<br>`$app->get('/check', 'App\Controllers\HomeController:check');`
 
 - 在网站目录/resources/views/material/下新建一个文件check.tpl，文件内容只需要写`{$status}`就可以了
 
 **2. 测试api**
 - 在浏览器打开网址**http(s)://你的域名/check?id=nodeid**，把nodeid换成你的节点id
+
+- 或是在命令行输入'curl http(s)://你的域名/check?id=nodeid'，查看返回结果
 
 - 返回结果如果是1代表节点正常，2代表前端认为节点离线，-1代表节点不存在
 
@@ -47,7 +53,7 @@
 
 - 赋予执行权限`chmod 777 check.sh`
 
-- 执行`vi check.sh`，修改你的节点id，网站域名，以及倒数第五行你的后端脚本run.sh的存放目录，然后保存
+- 执行`vim check.sh`，修改你的节点id，网站域名，以及倒数第五行你的后端脚本run.sh的存放目录或是选择其他运行方式，我使用的是service supervisord restart，然后保存
 
 - 测试执行`bash check.sh`，查看有无报错
 
