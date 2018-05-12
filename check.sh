@@ -1,7 +1,7 @@
 #!/bin/bash
 
-id=197 #节点id
-host="http://xxx.xxx.com" #主站域名
+id=1 #节点id
+host="https://xxx.com" #主站域名
 x=5 #循环次数
 
 url="$host/check?id=$id"
@@ -45,10 +45,10 @@ elif [ $s == 2 ]
 then	
 	echo "节点失联，已重启节点"
 	# systemctl restart ssr.service
-	# service supervisord restart
+	service supervisord restart
 	# pm2 restart all
-	cd /root/shadowsocks
-	bash run.sh
+	# cd /root/shadowsocks
+	# bash run.sh
 else
 	echo "遇到未知错误"
 fi
