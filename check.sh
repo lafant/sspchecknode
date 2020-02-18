@@ -45,7 +45,8 @@ elif [ $s == 2 ]
 then	
 	echo "节点失联，已重启节点"
 	# systemctl restart ssr.service
-	service supervisord restart
+	# service supervisord restart
+	docker restart 
 	# pm2 restart all
 	# cd /root/shadowsocks
 	# bash run.sh
